@@ -1,3 +1,15 @@
 <h1><%= @project.title %></h1>
 
-<%= link_to 'Home', '/' %>
+<ul>
+<% @project.tasks.each do |task| %>
+<li><%= task.title %></li>
+<%= link_to "[Delete]", project_task_path(task.project, task), method: :delete, data: {confirm: "are yue sure?"} %>
+<% end %>
+  <li>
+    <%= form_for [@project, @project.tasks.build] do |f| %>
+      <%= f.text_field :title %>
+      <%= f.submit %>
+    <% end %>
+  </li>
+</ul>
+
