@@ -2,7 +2,19 @@
 
 <ul>
 <% @project.tasks.each do |task| %>
-<li><%= task.title %></li>
+<li>
+ <%= check_box_tag "task[done]", true, task.done, {
+   data: {
+     url: project_task_done_path(@project, task),
+     method: :patch,
+     remote: true
+   },
+   onchange: '$(this).data("params", "task[done]=" + this.checked)'
+ } %>
+
+<%= task.title %>
+
+</li>
 <%= link_to "[Delete]", project_task_path(task.project, task), method: :delete, data: {confirm: "are yue sure?"} %>
 <% end %>
   <li>
