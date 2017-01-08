@@ -1,18 +1,30 @@
 class Projects::TasksController < ApplicationController
   before_action :set_project
-#  before_action :set_task
+  before_action :set_task, only: [:destroy]
 
   def create
-  	@project = Project.find(params[:project_id])
-    @task = @project.tasks.create(task_params)
-    redirect_to project_path(@project)
-    #render 'projects/show'
+    @task = Task.new(project: @project);
+    @task.assign_attributes(task_params);
+    if @task.save
+      redirect_to project_path(@project)
+    else
+      render 'projects/show'
+    end
+  end
+
+  def destroy
+    @task.destroy
+    redirect_to project_path(@task.project_id)
   end
 
   private
 
   def set_project
-    @projects = Project.find(params[:project_id])
+    @project = Project.find(params[:project_id])
+  end
+
+  def set_task
+    @task = Task.find(params[:id])
   end
 
   def task_params
